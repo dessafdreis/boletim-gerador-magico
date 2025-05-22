@@ -40,8 +40,8 @@ const Boletim = () => {
         </Card>
         <Card className="bg-gray-100 p-6 text-center">
           <h3 className="font-bold text-red-800">INSTITUTO EDUCACIONAL PALMARES</h3>
-          <p className="text-sm">Av. das Palmeiras, 123 - Jardim Palmares</p>
-          <p className="text-sm">Tel: (11) 1234-5678</p>
+          <p className="text-sm">Unidade Marujo - Rua Magalhães de Azevedo n° 215 Cosmos - RJ - CEP: 23059-460</p>
+          <p className="text-sm">Tel: 2409-6651</p>
           <p className="text-sm">contato@institutopalmares.edu.br</p>
         </Card>
       </div>
