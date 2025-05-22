@@ -1,9 +1,13 @@
 
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
-import { studentGrades, defaultStudent } from '@/data/studentData';
+import { studentGrades } from '@/data/studentData';
 
-const GradeChart = () => {
+interface GradeChartProps {
+  studentName?: string;
+}
+
+const GradeChart = ({ studentName }: GradeChartProps) => {
   const chartData = studentGrades.map(grade => ({
     disciplina: grade.disciplina.length > 10 ? grade.disciplina.substring(0, 10) + '...' : grade.disciplina,
     '1º Bimestre': grade.bimestre1.nota,
@@ -15,7 +19,7 @@ const GradeChart = () => {
   return (
     <div className="w-full h-96 mt-8">
       <h3 className="text-xl font-bold text-purple-800 text-center mb-4">
-        {defaultStudent.name}
+        {studentName || "Desempenho do Aluno"}
       </h3>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>

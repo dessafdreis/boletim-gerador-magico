@@ -1,10 +1,32 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import GradeChart from '@/components/GradeChart';
-import { studentGrades, defaultStudent } from '@/data/studentData';
+import { studentGrades, defaultStudent, Student } from '@/data/studentData';
+import StudentInfoEditor from '@/components/StudentInfoEditor';
 
 const Boletim = () => {
+  const [studentInfo, setStudentInfo] = useState<Student>({
+    id: defaultStudent.id,
+    name: defaultStudent.name,
+    series: defaultStudent.series,
+    turma: defaultStudent.turma
+  });
+
+  useEffect(() => {
+    // Check if there's saved student info in localStorage
+    const savedInfo = localStorage.getItem('studentInfo');
+    if (savedInfo) {
+      const parsedInfo = JSON.parse(savedInfo);
+      setStudentInfo({
+        ...studentInfo,
+        name: parsedInfo.name,
+        series: parsedInfo.series,
+        turma: parsedInfo.turma
+      });
+    }
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto">
       {/* Cabeçalho */}
@@ -18,22 +40,27 @@ const Boletim = () => {
       </div>
 
       <h1 className="text-2xl font-bold text-center mb-6">
-        Boletim Escolar: {defaultStudent.name}
+        Boletim Escolar: {studentInfo.name}
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>
-          <strong>Nome do Aluno:</strong> {defaultStudent.name}
+          <strong>Nome do Aluno:</strong> {studentInfo.name}
         </div>
         <div>
-          <strong>Nº:</strong> 1
+          <strong>Nº:</strong> {studentInfo.id}
         </div>
         <div>
-          <strong>Série:</strong> {defaultStudent.series}
+          <strong>Série:</strong> {studentInfo.series}
         </div>
         <div>
-          <strong>Turma:</strong> {defaultStudent.turma}
+          <strong>Turma:</strong> {studentInfo.turma}
         </div>
+      </div>
+
+      {/* Student Info Editor */}
+      <div className="mb-8">
+        <StudentInfoEditor />
       </div>
 
       {/* Tabela Principal */}
@@ -99,7 +126,7 @@ const Boletim = () => {
 
       {/* Gráfico */}
       <Card className="p-6">
-        <GradeChart />
+        <GradeChart studentName={studentInfo.name} />
       </Card>
 
       {/* Observações */}

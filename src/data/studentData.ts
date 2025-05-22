@@ -1,4 +1,3 @@
-
 export interface Student {
   id: number;
   name: string;
@@ -25,9 +24,9 @@ export interface Subject {
 
 export const defaultStudent: Student = {
   id: 1,
-  name: "Agatha Souza Silva",
-  series: "A",
-  turma: "A"
+  name: "GUSTAVO NASCIMENTO",
+  series: "1º ENSINO MÉDIO",
+  turma: "1001"
 };
 
 export const subjects: Subject[] = [
@@ -193,6 +192,6 @@ export const studentGrades: Grade[] = [
 export const schoolSettings = {
   mediaMinima: 6.0,
   frequenciaMinima: 75,
-  serie: "A",
-  turma: "A"
+  serie: "1º ENSINO MÉDIO",
+  turma: "1001"
 };
