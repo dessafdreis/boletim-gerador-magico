@@ -18,7 +18,7 @@ const GradeChart = ({ studentName }: GradeChartProps) => {
 
   return (
     <div className="w-full h-96 mt-8">
-      <h3 className="text-xl font-bold text-purple-800 text-center mb-4">
+      <h3 className="text-xl font-bold text-red-800 text-center mb-4">
         {studentName || "Desempenho do Aluno"}
       </h3>
       <ResponsiveContainer width="100%" height="100%">

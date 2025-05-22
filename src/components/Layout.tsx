@@ -21,7 +21,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-purple-800 text-white">
+      <nav className="bg-red-800 text-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center justify-center py-2">
             {navigationItems.map((item) => (
@@ -30,8 +30,8 @@ const Layout = ({ children }: LayoutProps) => {
                 to={item.path}
                 className={`px-4 py-2 mx-1 my-1 text-sm font-semibold rounded transition-colors ${
                   location.pathname === item.path
-                    ? 'bg-yellow-500 text-purple-900'
-                    : 'bg-purple-700 hover:bg-yellow-400 hover:text-purple-900'
+                    ? 'bg-yellow-500 text-red-900'
+                    : 'bg-red-700 hover:bg-yellow-400 hover:text-red-900'
                 }`}
               >
                 {item.label}

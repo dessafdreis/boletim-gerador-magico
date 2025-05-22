@@ -49,7 +49,7 @@ const StudentInfoEditor = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-xl font-bold text-purple-800">Dados do Aluno</CardTitle>
+        <CardTitle className="text-xl font-bold text-red-800">Dados do Aluno</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -96,7 +96,7 @@ const StudentInfoEditor = () => {
               )}
             />
             
-            <Button type="submit" className="bg-purple-800 hover:bg-purple-900">
+            <Button type="submit" className="bg-red-800 hover:bg-red-900">
               Salvar Alterações
             </Button>
           </form>

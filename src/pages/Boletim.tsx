@@ -31,15 +31,22 @@ const Boletim = () => {
     <div className="max-w-7xl mx-auto">
       {/* Cabeçalho */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <Card className="bg-gray-100 p-6 text-center">
-          <h3 className="font-bold text-gray-600">LOGO DA ESCOLA AQUI</h3>
+        <Card className="bg-gray-100 p-6 flex justify-center items-center">
+          <img 
+            src="/lovable-uploads/6098ce0c-5f29-41f5-a820-b0bb56d879fc.png" 
+            alt="Instituto Educacional Palmares - 40 Anos" 
+            className="h-24"
+          />
         </Card>
         <Card className="bg-gray-100 p-6 text-center">
-          <h3 className="font-bold text-gray-600">DADOS DA ESCOLA AQUI</h3>
+          <h3 className="font-bold text-red-800">INSTITUTO EDUCACIONAL PALMARES</h3>
+          <p className="text-sm">Av. das Palmeiras, 123 - Jardim Palmares</p>
+          <p className="text-sm">Tel: (11) 1234-5678</p>
+          <p className="text-sm">contato@institutopalmares.edu.br</p>
         </Card>
       </div>
 
-      <h1 className="text-2xl font-bold text-center mb-6">
+      <h1 className="text-2xl font-bold text-center mb-6 text-red-800">
         Boletim Escolar: {studentInfo.name}
       </h1>
 
@@ -65,13 +72,13 @@ const Boletim = () => {
 
       {/* Tabela Principal */}
       <Card className="overflow-hidden mb-8">
-        <div className="bg-purple-800 text-white p-4">
+        <div className="bg-red-800 text-white p-4">
           <h2 className="text-xl font-bold text-center">DISCIPLINA</h2>
         </div>
         
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-purple-700 text-white">
+            <thead className="bg-red-700 text-white">
               <tr>
                 <th rowSpan={2} className="p-2 border-r border-white">DISCIPLINA</th>
                 <th colSpan={2} className="p-2 border-r border-white">1º Bimestre</th>
@@ -130,7 +137,7 @@ const Boletim = () => {
       </Card>
 
       {/* Observações */}
-      <Card className="mt-8 bg-purple-800 text-white p-4">
+      <Card className="mt-8 bg-red-800 text-white p-4">
         <h3 className="font-bold mb-4">OBSERVAÇÕES:</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
           <div>
