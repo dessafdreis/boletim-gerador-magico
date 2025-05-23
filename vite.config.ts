@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/boletim-gerador-magico/", // 👈 isso aqui é essencial para o GitHub Pages
+  base: "boletim-gerador-magico./", // 👈 isso aqui é essencial para o GitHub Pages
   server: {
     host: "::",
     port: 8080,
