@@ -15,6 +15,21 @@ const Dashboard = () => {
       <Card className="bg-red-800 p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <Link 
+            to="/gerenciamento-notas"
+            className="bg-yellow-500 hover:bg-yellow-400 text-red-900 font-bold py-6 px-8 rounded-lg text-center text-xl transition-colors"
+          >
+            GERENCIAR NOTAS
+          </Link>
+          <Link 
+            to="/boletim"
+            className="bg-yellow-500 hover:bg-yellow-400 text-red-900 font-bold py-6 px-8 rounded-lg text-center text-xl transition-colors"
+          >
+            BOLETIM
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <Link 
             to="/1-bimestre"
             className="bg-yellow-500 hover:bg-yellow-400 text-red-900 font-bold py-6 px-8 rounded-lg text-center text-xl transition-colors"
           >
@@ -48,19 +63,12 @@ const Dashboard = () => {
             CONFIGURAÇÕES
           </Link>
           <Link 
-            to="/boletim"
+            to="/instrucoes"
             className="bg-yellow-500 hover:bg-yellow-400 text-red-900 font-bold py-6 px-8 rounded-lg text-center text-xl transition-colors"
           >
-            BOLETIM
+            INSTRUÇÕES GERAIS
           </Link>
         </div>
-
-        <Link 
-          to="/instrucoes"
-          className="block bg-yellow-500 hover:bg-yellow-400 text-red-900 font-bold py-6 px-8 rounded-lg text-center text-xl transition-colors"
-        >
-          INSTRUÇÕES GERAIS
-        </Link>
       </Card>
 
       <div className="text-center mt-8 text-gray-600">

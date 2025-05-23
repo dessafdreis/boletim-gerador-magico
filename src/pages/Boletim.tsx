@@ -2,8 +2,19 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import GradeChart from '@/components/GradeChart';
-import { studentGrades, defaultStudent, Student } from '@/data/studentData';
+import { defaultStudent, Student } from '@/data/studentData';
 import StudentInfoEditor from '@/components/StudentInfoEditor';
+
+interface RelatorioItem {
+  disciplina: string;
+  bimestre1: { nota: number; frequencia: number };
+  bimestre2: { nota: number; frequencia: number };
+  bimestre3: { nota: number; frequencia: number };
+  bimestre4: { nota: number; frequencia: number };
+  media: number;
+  frequenciaTotal: number;
+  situacao: string;
+}
 
 const Boletim = () => {
   const [studentInfo, setStudentInfo] = useState<Student>({
@@ -13,8 +24,10 @@ const Boletim = () => {
     turma: defaultStudent.turma
   });
 
+  const [relatorioFinal, setRelatorioFinal] = useState<RelatorioItem[]>([]);
+
   useEffect(() => {
-    // Check if there's saved student info in localStorage
+    // Carregar informações do aluno
     const savedInfo = localStorage.getItem('studentInfo');
     if (savedInfo) {
       const parsedInfo = JSON.parse(savedInfo);
@@ -24,6 +37,12 @@ const Boletim = () => {
         series: parsedInfo.series,
         turma: parsedInfo.turma
       });
+    }
+
+    // Carregar relatório final gerado
+    const relatorioSalvo = localStorage.getItem('relatorioFinal');
+    if (relatorioSalvo) {
+      setRelatorioFinal(JSON.parse(relatorioSalvo));
     }
   }, []);
 
@@ -70,71 +89,90 @@ const Boletim = () => {
         <StudentInfoEditor />
       </div>
 
-      {/* Tabela Principal */}
-      <Card className="overflow-hidden mb-8">
-        <div className="bg-red-800 text-white p-4">
-          <h2 className="text-xl font-bold text-center">DISCIPLINA</h2>
-        </div>
-        
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-red-700 text-white">
-              <tr>
-                <th rowSpan={2} className="p-2 border-r border-white">DISCIPLINA</th>
-                <th colSpan={2} className="p-2 border-r border-white">1º Bimestre</th>
-                <th colSpan={2} className="p-2 border-r border-white">2º Bimestre</th>
-                <th colSpan={2} className="p-2 border-r border-white">3º Bimestre</th>
-                <th colSpan={2} className="p-2 border-r border-white">4º Bimestre</th>
-                <th colSpan={2} className="p-2 border-r border-white">Avaliação / Situação</th>
-              </tr>
-              <tr>
-                <th className="p-1 border-r border-white">N</th>
-                <th className="p-1 border-r border-white">F</th>
-                <th className="p-1 border-r border-white">N</th>
-                <th className="p-1 border-r border-white">F</th>
-                <th className="p-1 border-r border-white">N</th>
-                <th className="p-1 border-r border-white">F</th>
-                <th className="p-1 border-r border-white">N</th>
-                <th className="p-1 border-r border-white">F</th>
-                <th className="p-1 border-r border-white">Média</th>
-                <th className="p-1 border-r border-white">% Freq Total</th>
-                <th className="p-1">Situação</th>
-              </tr>
-            </thead>
-            <tbody>
-              {studentGrades.map((grade, index) => (
-                <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                  <td className="p-2 font-medium border-r">{grade.disciplina}</td>
-                  <td className="p-1 text-center border-r">{grade.bimestre1.nota.toFixed(1)}</td>
-                  <td className="p-1 text-center border-r">{grade.bimestre1.faltas}</td>
-                  <td className="p-1 text-center border-r">{grade.bimestre2.nota.toFixed(1)}</td>
-                  <td className="p-1 text-center border-r">{grade.bimestre2.faltas}</td>
-                  <td className="p-1 text-center border-r">{grade.bimestre3.nota.toFixed(1)}</td>
-                  <td className="p-1 text-center border-r">{grade.bimestre3.faltas}</td>
-                  <td className="p-1 text-center border-r">{grade.bimestre4.nota.toFixed(1)}</td>
-                  <td className="p-1 text-center border-r">{grade.bimestre4.faltas}</td>
-                  <td className="p-1 text-center border-r font-semibold">{grade.media.toFixed(2)}</td>
-                  <td className="p-1 text-center border-r">{grade.frequenciaTotal}%</td>
-                  <td className="p-1 text-center">
-                    <span className={`px-1 rounded text-xs ${
-                      grade.situacao === 'Aprovado' ? 'bg-green-100 text-green-800' :
-                      grade.situacao === 'Reprovado' ? 'bg-red-100 text-red-800' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {grade.situacao}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+      {relatorioFinal.length > 0 ? (
+        <>
+          {/* Tabela Principal */}
+          <Card className="overflow-hidden mb-8">
+            <div className="bg-red-800 text-white p-4">
+              <h2 className="text-xl font-bold text-center">DISCIPLINA</h2>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-red-700 text-white">
+                  <tr>
+                    <th rowSpan={2} className="p-2 border-r border-white">DISCIPLINA</th>
+                    <th colSpan={2} className="p-2 border-r border-white">1º Bimestre</th>
+                    <th colSpan={2} className="p-2 border-r border-white">2º Bimestre</th>
+                    <th colSpan={2} className="p-2 border-r border-white">3º Bimestre</th>
+                    <th colSpan={2} className="p-2 border-r border-white">4º Bimestre</th>
+                    <th colSpan={2} className="p-2 border-r border-white">Avaliação / Situação</th>
+                  </tr>
+                  <tr>
+                    <th className="p-1 border-r border-white">N</th>
+                    <th className="p-1 border-r border-white">F</th>
+                    <th className="p-1 border-r border-white">N</th>
+                    <th className="p-1 border-r border-white">F</th>
+                    <th className="p-1 border-r border-white">N</th>
+                    <th className="p-1 border-r border-white">F</th>
+                    <th className="p-1 border-r border-white">N</th>
+                    <th className="p-1 border-r border-white">F</th>
+                    <th className="p-1 border-r border-white">Média</th>
+                    <th className="p-1 border-r border-white">% Freq Total</th>
+                    <th className="p-1">Situação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {relatorioFinal.map((item, index) => (
+                    <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      <td className="p-2 font-medium border-r">{item.disciplina}</td>
+                      <td className="p-1 text-center border-r">{item.bimestre1.nota.toFixed(1)}</td>
+                      <td className="p-1 text-center border-r">{(100 - item.bimestre1.frequencia).toFixed(0)}</td>
+                      <td className="p-1 text-center border-r">{item.bimestre2.nota.toFixed(1)}</td>
+                      <td className="p-1 text-center border-r">{(100 - item.bimestre2.frequencia).toFixed(0)}</td>
+                      <td className="p-1 text-center border-r">{item.bimestre3.nota.toFixed(1)}</td>
+                      <td className="p-1 text-center border-r">{(100 - item.bimestre3.frequencia).toFixed(0)}</td>
+                      <td className="p-1 text-center border-r">{item.bimestre4.nota.toFixed(1)}</td>
+                      <td className="p-1 text-center border-r">{(100 - item.bimestre4.frequencia).toFixed(0)}</td>
+                      <td className="p-1 text-center border-r font-semibold">{item.media.toFixed(2)}</td>
+                      <td className="p-1 text-center border-r">{item.frequenciaTotal.toFixed(1)}%</td>
+                      <td className="p-1 text-center">
+                        <span className={`px-1 rounded text-xs ${
+                          item.situacao === 'Aprovado' ? 'bg-green-100 text-green-800' :
+                          item.situacao === 'Reprovado' ? 'bg-red-100 text-red-800' :
+                          'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {item.situacao}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
 
-      {/* Gráfico */}
-      <Card className="p-6">
-        <GradeChart studentName={studentInfo.name} />
-      </Card>
+          {/* Gráfico */}
+          <Card className="p-6">
+            <GradeChart studentName={studentInfo.name} />
+          </Card>
+        </>
+      ) : (
+        <Card className="p-8 text-center">
+          <h3 className="text-xl font-bold text-red-800 mb-4">Nenhum relatório encontrado</h3>
+          <p className="text-gray-600 mb-4">
+            Para visualizar o boletim, você precisa primeiro:
+          </p>
+          <ol className="text-left max-w-md mx-auto space-y-2 text-gray-700">
+            <li>1. Cadastrar as disciplinas</li>
+            <li>2. Lançar as notas de cada bimestre</li>
+            <li>3. Gerar o relatório final</li>
+          </ol>
+          <p className="mt-4 text-sm text-gray-500">
+            Acesse "Gerenciar Notas" no menu principal para começar.
+          </p>
+        </Card>
+      )}
 
       {/* Observações */}
       <Card className="mt-8 bg-red-800 text-white p-4">
