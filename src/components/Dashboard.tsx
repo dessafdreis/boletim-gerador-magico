@@ -8,7 +8,7 @@ const Dashboard = () => {
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-red-800 mb-2">
-          BOLETIM ESCOLAR - INSTITUTO EDUCACIONAL PALMARES
+          BOLETIM ESCOLAR 
         </h1>
       </div>
 
