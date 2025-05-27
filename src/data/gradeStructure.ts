@@ -1,7 +1,7 @@
 
 export interface Avaliacao {
   id: string;
-  tipo: 'prova' | 'trabalho' | 'teste';
+  tipo: 'trabalho' | 'av1' | 'av2' | 'teste';
   nome: string;
   nota: number;
   peso: number;
@@ -13,6 +13,10 @@ export interface BimestreDetalhado {
   faltas: number;
   frequencia: number;
   notaFinal: number;
+  precisaRecuperacao?: boolean;
+  notaRecuperacao?: number;
+  notaFinalComRecuperacao?: number;
+  aprovado?: boolean;
 }
 
 export interface DisciplinaCompleta {
@@ -41,6 +45,38 @@ export const calcularNotaBimestre = (avaliacoes: Avaliacao[]): number => {
 export const calcularFrequencia = (diasLetivos: number, faltas: number): number => {
   if (diasLetivos === 0) return 100;
   return Math.max(0, ((diasLetivos - faltas) / diasLetivos) * 100);
+};
+
+export const calcularSituacaoComRecuperacao = (notaFinal: number, notaRecuperacao?: number): { 
+  precisaRecuperacao: boolean;
+  notaFinalComRecuperacao: number;
+  aprovado: boolean;
+} => {
+  const mediaMinima = 6.0;
+  
+  if (notaFinal >= mediaMinima) {
+    return {
+      precisaRecuperacao: false,
+      notaFinalComRecuperacao: notaFinal,
+      aprovado: true
+    };
+  }
+  
+  // Precisa de recuperação
+  if (notaRecuperacao !== undefined) {
+    const notaComRecuperacao = Math.max(notaFinal, notaRecuperacao);
+    return {
+      precisaRecuperacao: true,
+      notaFinalComRecuperacao: notaComRecuperacao,
+      aprovado: notaComRecuperacao >= mediaMinima
+    };
+  }
+  
+  return {
+    precisaRecuperacao: true,
+    notaFinalComRecuperacao: notaFinal,
+    aprovado: false
+  };
 };
 
 export const calcularSituacao = (media: number, frequenciaTotal: number): string => {

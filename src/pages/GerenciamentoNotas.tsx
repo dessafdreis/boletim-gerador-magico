@@ -7,7 +7,7 @@ import DisciplinaEditor from '@/components/DisciplinaEditor';
 import NotasEditor from '@/components/NotasEditor';
 import { Subject, subjects as initialSubjects } from '@/data/studentData';
 import { BimestreDetalhado, calcularSituacao } from '@/data/gradeStructure';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 const GerenciamentoNotas = () => {
   const [disciplinas, setDisciplinas] = useState<Subject[]>(initialSubjects);
@@ -61,9 +61,10 @@ const GerenciamentoNotas = () => {
     const relatorio = disciplinas.map(disciplina => {
       const dadosDisciplina = dadosNotas[disciplina.name] || {};
       
-      const medias = [1, 2, 3, 4].map(bim => 
-        dadosDisciplina[bim]?.notaFinal || 0
-      );
+      const medias = [1, 2, 3, 4].map(bim => {
+        const bimestreData = dadosDisciplina[bim];
+        return bimestreData?.notaFinalComRecuperacao || bimestreData?.notaFinal || 0;
+      });
       
       const frequencias = [1, 2, 3, 4].map(bim => 
         dadosDisciplina[bim]?.frequencia || 100
@@ -100,14 +101,14 @@ const GerenciamentoNotas = () => {
       </h1>
 
       <Tabs defaultValue="disciplinas" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
-          <TabsTrigger value="disciplinas" className="data-[state=active]:bg-red-800 data-[state=active]:text-white">
+        <TabsList className="grid w-full grid-cols-3 mb-6 bg-red-100">
+          <TabsTrigger value="disciplinas" className="data-[state=active]:bg-red-800 data-[state=active]:text-white text-red-800">
             Disciplinas
           </TabsTrigger>
-          <TabsTrigger value="notas" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-red-900">
+          <TabsTrigger value="notas" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-red-900 text-red-800">
             Lançar Notas
           </TabsTrigger>
-          <TabsTrigger value="relatorio" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">
+          <TabsTrigger value="relatorio" className="data-[state=active]:bg-red-600 data-[state=active]:text-white text-red-800">
             Relatório Final
           </TabsTrigger>
         </TabsList>
@@ -121,14 +122,17 @@ const GerenciamentoNotas = () => {
 
         <TabsContent value="notas">
           <div className="space-y-6">
-            <Card className="p-4">
+            <Card className="p-4 border-red-200">
               <div className="flex flex-wrap gap-2 mb-4">
                 {disciplinas.map((disciplina) => (
                   <Button
                     key={disciplina.name}
                     variant={disciplinaSelecionada === disciplina.name ? "default" : "outline"}
                     onClick={() => setDisciplinaSelecionada(disciplina.name)}
-                    className={disciplinaSelecionada === disciplina.name ? "bg-red-800 hover:bg-red-900" : ""}
+                    className={disciplinaSelecionada === disciplina.name ? 
+                      "bg-red-800 hover:bg-red-900" : 
+                      "border-red-300 text-red-800 hover:bg-red-50"
+                    }
                   >
                     {disciplina.name}
                   </Button>
@@ -159,12 +163,20 @@ const GerenciamentoNotas = () => {
         </TabsContent>
 
         <TabsContent value="relatorio">
-          <Card className="p-6">
+          <Card className="p-6 border-red-200">
             <div className="text-center space-y-4">
               <h3 className="text-2xl font-bold text-red-800">Gerar Relatório Final</h3>
               <p className="text-gray-600">
-                Clique no botão abaixo para calcular as médias finais e gerar o boletim completo do aluno.
+                Clique no botão abaixo para calcular as médias finais (incluindo recuperação) e gerar o boletim completo do aluno.
               </p>
+              <div className="bg-yellow-100 p-4 rounded-lg border border-yellow-300 mb-4">
+                <p className="text-yellow-800 font-semibold">Sistema de Avaliação:</p>
+                <ul className="text-sm text-yellow-700 mt-2 space-y-1">
+                  <li>• Média mínima para aprovação: 6.0</li>
+                  <li>• Notas abaixo de 6.0 vão para recuperação</li>
+                  <li>• A nota final será a maior entre a nota regular e a recuperação</li>
+                </ul>
+              </div>
               <Button 
                 onClick={gerarRelatorioFinal}
                 className="bg-red-800 hover:bg-red-900 text-white px-8 py-3 text-lg"
