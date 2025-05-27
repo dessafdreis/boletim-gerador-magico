@@ -1,12 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { defaultStudent } from '@/data/studentData';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 interface StudentInfoForm {
   name: string;
@@ -29,29 +29,35 @@ const StudentInfoEditor = () => {
     },
   });
 
+  useEffect(() => {
+    // Carregar dados salvos
+    const savedInfo = localStorage.getItem('studentInfo');
+    if (savedInfo) {
+      const parsedInfo = JSON.parse(savedInfo);
+      setStudent(parsedInfo);
+      form.reset(parsedInfo);
+    }
+  }, [form]);
+
   const onSubmit = (data: StudentInfoForm) => {
-    setStudent({
-      name: data.name,
-      series: data.series,
-      turma: data.turma,
-    });
-    
-    // In a real app, this would update the data in the database
-    // For now, we're just updating the local state
+    setStudent(data);
     localStorage.setItem('studentInfo', JSON.stringify(data));
     
     toast({
       title: "Informações atualizadas",
       description: "Os dados do aluno foram atualizados com sucesso!",
     });
+
+    // Recarregar a página para refletir as mudanças
+    window.location.reload();
   };
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="text-xl font-bold text-red-800">Dados do Aluno</CardTitle>
+      <CardHeader className="bg-red-800 text-white">
+        <CardTitle className="text-xl font-bold">Dados do Aluno</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -61,7 +67,7 @@ const StudentInfoEditor = () => {
                 <FormItem>
                   <FormLabel>Nome do Aluno</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} className="border-red-200 focus:border-red-500" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -75,7 +81,7 @@ const StudentInfoEditor = () => {
                 <FormItem>
                   <FormLabel>Série</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} className="border-red-200 focus:border-red-500" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -89,14 +95,14 @@ const StudentInfoEditor = () => {
                 <FormItem>
                   <FormLabel>Turma</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} className="border-red-200 focus:border-red-500" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             
-            <Button type="submit" className="bg-red-800 hover:bg-red-900">
+            <Button type="submit" className="bg-red-800 hover:bg-red-900 text-white">
               Salvar Alterações
             </Button>
           </form>
